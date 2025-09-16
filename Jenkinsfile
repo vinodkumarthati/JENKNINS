@@ -11,14 +11,14 @@ pipeline {
                 sh """
                 rm -rf out
                 mkdir -p out
-                javac -d out src/hello/Hello.java
+                javac -d out Hello.java
                 """
             }
         }
         stage('Run') {
             steps {
                 sh """
-                java -cp out hello.Hello
+                java -cp out Hello
                 echo Build_OK > artifact.txt
                 """
             }
