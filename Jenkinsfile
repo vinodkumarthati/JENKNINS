@@ -10,15 +10,15 @@ pipeline {
             steps {
                 sh """
                 rm -rf out
-                mkdir out
-                javac -d out JENKNINS/Hello.java
+                mkdir -p out
+                javac -d out src/hello/Hello.java
                 """
             }
         }
         stage('Run') {
             steps {
                 sh """
-                java -cp out Hello
+                java -cp out hello.Hello
                 echo Build_OK > artifact.txt
                 """
             }
