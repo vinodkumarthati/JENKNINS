@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    tools {
+        maven 'Maven_3.9'  // Use the Maven you configured in Jenkins
+    }
     stages {
         stage('Checkout') {
             steps {
@@ -8,25 +11,18 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh """
-                rm -rf out
-                mkdir -p out
-                javac -d out Hello.java
-                """
+                sh 'mvn clean package'
             }
         }
         stage('Run') {
             steps {
-                sh """
-                java -cp out Hello
-                echo Build_OK > artifact.txt
-                """
+                sh 'java -cp target/myapp-1.0-SNAPSHOT.jar com.example.App'
             }
         }
     }
     post {
         always {
-            archiveArtifacts artifacts: 'artifact.txt, out/**', allowEmptyArchive: false
+            archiveArtifacts artifacts: 'target/*.jar', allowEmptyArchive: false
         }
     }
 }
