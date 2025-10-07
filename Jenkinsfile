@@ -16,7 +16,7 @@ pipeline {
         stage('Build') {
             steps {
                 // Compile manually since Maven won't detect sources
-                sh 'javac -d target JENKNINS/src/main/java/Hello.java'
+                sh 'javac -d target src/main/java/Hello.java'
                 // Create JAR manually
                 sh 'jar cf target/jenkins-demo-1.0-SNAPSHOT.jar -C target .'
             }
