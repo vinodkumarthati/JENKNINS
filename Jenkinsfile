@@ -1,32 +1,38 @@
 pipeline {
     agent any
+
+    tools {
+        maven 'Maven_3.9'
+        jdk 'JDK_17'
+    }
+
     stages {
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
+
         stage('Build') {
             steps {
-                sh """
-                rm -rf out
-                mkdir -p out
-                javac -d out Hello.java
-                """
+                // Compile manually since Maven won't detect sources
+                sh 'javac -d target JENKNINS/src/main/java/Hello.java'
+                // Create JAR manually
+                sh 'jar cf target/jenkins-demo-1.0-SNAPSHOT.jar -C target .'
             }
         }
+
         stage('Run') {
             steps {
-                sh """
-                java -cp out Hello
-                echo Build_OK > artifact.txt
-                """
+                sh 'java -cp target/jenkins-demo-1.0-SNAPSHOT.jar Hello'
+                sh 'echo Build_OK > artifact.txt'
             }
         }
     }
+
     post {
         always {
-            archiveArtifacts artifacts: 'artifact.txt, out/**', allowEmptyArchive: false
+            archiveArtifacts artifacts: 'artifact.txt, target/**', allowEmptyArchive: false
         }
     }
 }
